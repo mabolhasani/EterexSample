@@ -1,4 +1,6 @@
-﻿using EterexSample.Settings;
+﻿using EterexSample.Models;
+using EterexSample.Settings;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,19 +25,14 @@ namespace EterexSample
             _client.DefaultRequestHeaders.Add("Accepts", "application/json");
         }
 
-        public async Task LatestRates(int coinMarketCapId)
+        public async Task<HttpResponseMessage> LatestRates(int coinMarketCapId)
         {
             var query = HttpUtility.ParseQueryString(string.Empty);
 
             query["id"] = coinMarketCapId.ToString();
             query["convert"] = "EUR";
 
-            var response = await _client.GetAsync($"cryptocurrency/quotes/latest?{query}");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var result = await response.Content.ReadAsStringAsync();
-            }
+            return await _client.GetAsync($"cryptocurrency/quotes/latest?{query}");
         }
     }
 }
